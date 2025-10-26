@@ -95,7 +95,7 @@ class CustomNavbar extends HTMLElement {
             <nav>
                 <div class="nav-container">
                     <div class="logo">
-                        ⚛️ ElektronKulit
+                        ⚛️ Electron Configuration
                     </div>
                     <ul class="nav-menu" id="navMenu">
                         <li>
@@ -194,3 +194,4 @@ class CustomNavbar extends HTMLElement {
 }
 
 customElements.define("custom-navbar", CustomNavbar);
+
