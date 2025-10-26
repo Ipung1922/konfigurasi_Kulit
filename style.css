@@ -1,0 +1,246 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes orbit {
+  from {
+    transform: rotate(0deg) translateX(var(--orbit-radius)) rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(var(--orbit-radius)) rotate(-360deg);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 1s ease-out;
+}
+
+/* Atom Animation */
+.atom-animation {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.atom-core {
+  position: absolute;
+  top: 45%;
+  left: 45%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  background: radial-gradient(circle, #3b82f6, #1e40af);
+  border-radius: 50%;
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.8);
+  animation: pulse 2s infinite;
+}
+
+.orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid rgba(59, 130, 246, 0.3);
+  border-radius: 50%;
+}
+
+.orbit-1 {
+  width: 120px;
+  height: 120px;
+}
+
+.orbit-2 {
+  width: 200px;
+  height: 200px;
+}
+
+.orbit-3 {
+  width: 280px;
+  height: 280px;
+}
+
+.electron {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  background: cyan;
+  border-radius: 50%;
+  transform-origin: calc(var(--orbit-radius) * -1) 0;
+  animation: orbit linear infinite;
+}
+
+/* ===== ORBIT 1 ===== */
+.electron-1, .electron-1a {
+  --orbit-radius: 60px;
+  animation-duration: 4s;
+}
+.electron-1  { animation-delay: 0s; }
+.electron-1a { animation-delay: -2s; } /* 180° beda fase */
+
+/* ===== ORBIT 2 ===== */
+.electron-2, .electron-2a, .electron-2b, .electron-2c,
+.electron-2d, .electron-2e, .electron-2f, .electron-2g {
+  --orbit-radius: 100px;
+  animation-duration: 6s;
+}
+
+/* 8 elektron → beda fase 45° = 0.75s */
+.electron-2  { animation-delay: 0s; }
+.electron-2a { animation-delay: -0.75s; }
+.electron-2b { animation-delay: -1.5s; }
+.electron-2c { animation-delay: -2.25s; }
+.electron-2d { animation-delay: -3s; }
+.electron-2e { animation-delay: -3.75s; }
+.electron-2f { animation-delay: -4.5s; }
+.electron-2g { animation-delay: -5.25s; }
+
+/* ===== ORBIT 3 ===== */
+.electron-3, .electron-3a {
+  --orbit-radius: 140px;
+  animation-duration: 8s;
+}
+.electron-3  { animation-delay: 0s; }
+.electron-3a { animation-delay: -4s; } /* 180° beda fase */
+
+/* ===== ANIMASI ===== */
+@keyframes orbit {
+  from {
+    transform: rotate(0deg) translateX(var(--orbit-radius)) rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(var(--orbit-radius)) rotate(-360deg);
+  }
+}
+/* Card Hover Effect */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #3b82f6, #1e40af);
+  border-radius: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .atom-animation {
+    transform: scale(0.8);
+  }
+}
+
+/* Additional utility classes */
+.text-shadow {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.backdrop-blur {
+  backdrop-filter: blur(10px);
+}
+
+/* Gradient text */
+.bg-clip-text {
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Table styles */
+.electron-table {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.electron-table th {
+  background: linear-gradient(135deg, #3b82f6, #1e40af);
+  color: white;
+  padding: 1rem;
+  text-align: left;
+}
+
+.electron-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Quiz card styles */
+.quiz-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.quiz-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Discussion styles */
+.discussion-bubble {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  border-radius: 18px;
+  padding: 1rem 1.5rem;
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.discussion-bubble::before {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 20px;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  transform: rotate(45deg);
+}

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Games Interaktif - Konfigurasi Elektron</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+  </head>
+  <body
+    class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50"
+  >
+    <custom-navbar></custom-navbar>
+
+    <main class="container mx-auto px-4 py-12 max-w-6xl">
+      <h1
+        class="text-4xl md:text-5xl font-bold text-center mb-8 text-purple-800"
+      >
+        🎮 Games Interaktif
+      </h1>
+
+      <!-- Game Selection -->
+      <div class="grid md:grid-cols-2 gap-8 mb-12">
+        <!-- Kalkulator Ajaib -->
+        <div
+          class="bg-white rounded-2xl shadow-lg p-8 transform transition-all hover:scale-105"
+        >
+          <div class="text-center mb-6">
+            <!-- Logo Kalkulator -->
+            <img
+              src="kalkulator.png"
+              alt="Logo Kalkulator"
+              class="w-24 h-24 mx-auto mb-4 object-contain"
+            />
+
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">
+              🔢 Kalkulator Ajaib
+            </h2>
+            <p class="text-gray-600">
+              Buka kalkulator interaktif untuk melihat konfigurasi elektron.
+            </p>
+          </div>
+
+          <div class="space-y-4">
+            <a
+              href="kalkulator.html"
+              class="block text-center w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold py-3 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all"
+            >
+              Mulai Kalkulator
+            </a>
+          </div>
+        </div>
+
+        <!-- Game Flipcard -->
+        <div
+          class="bg-white rounded-2xl shadow-lg p-8 transform transition-all hover:scale-105"
+        >
+          <div class="text-center mb-6">
+            <!-- Logo Flipcard -->
+            <img
+              src="flip.png"
+              alt="Logo Flipcard"
+              class="w-24 h-24 mx-auto mb-4 object-contain"
+            />
+
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">
+              🧠 Game Flipcard
+            </h2>
+            <p class="text-gray-600">
+              Uji pengetahuanmu dengan permainan kartu memori kimia.
+            </p>
+          </div>
+
+          <div class="space-y-4">
+            <a
+              href="flipcard.html"
+              class="block text-center w-full bg-gradient-to-r from-green-500 to-teal-600 text-white font-bold py-3 rounded-lg hover:from-green-600 hover:to-teal-700 transition-all"
+            >
+              Mulai Game
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <custom-footer></custom-footer>
+
+    <script src="components/navbar.js"></script>
+    <script src="components/footer.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        feather.replace();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Latihan Soal - Konfigurasi Elektron</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  </head>
+  <body
+    class="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50"
+  >
+    <custom-navbar></custom-navbar>
+
+    <main class="container mx-auto px-4 py-12 max-w-4xl">
+      <!-- Start Screen -->
+      <div
+        id="startScreen"
+        class="bg-white rounded-2xl shadow-lg p-8 text-center"
+      >
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 text-green-800">
+          🧩 Latihan Soal
+        </h1>
+        <div
+          class="w-24 h-24 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-6"
+        >
+          <i data-feather="edit-3" class="text-white w-12 h-12"></i>
+        </div>
+        <p class="text-lg text-gray-700 mb-8">
+          Tes pemahamanmu tentang konfigurasi elektron dengan 10 soal pilihan
+          ganda!
+        </p>
+
+        <div class="max-w-md mx-auto">
+          <label class="block text-left text-sm font-medium text-gray-700 mb-2">
+            Nama Lengkap
+          </label>
+          <input
+            type="text"
+            id="userName"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent mb-6"
+            placeholder="Masukkan nama kamu..."
+          />
+
+          <!-- Tombol Mulai Quiz -->
+          <button
+            onclick="startQuiz()"
+            class="w-full bg-gradient-to-r from-green-500 to-teal-600 text-white font-bold py-3 px-6 rounded-lg hover:from-green-600 hover:to-teal-700 transition-all transform hover:scale-105"
+          >
+            Mulai Quiz
+          </button>
+
+          <!-- Tombol Lihat Leaderboard -->
+          <button
+            onclick="location.href='leaderboard.html'"
+            class="w-full mt-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold py-3 px-6 rounded-lg hover:from-yellow-500 hover:to-orange-600 transition-all transform hover:scale-105"
+          >
+            🏆 Lihat Leaderboard
+          </button>
+        </div>
+      </div>
+
+      <!-- Quiz Screen -->
+      <div id="quizScreen" class="hidden">
+        <!-- Progress Bar -->
+        <div class="mb-6">
+          <div class="flex justify-between text-sm text-gray-600 mb-2">
+            <span>Progress</span>
+            <span id="questionCounter">1 dari 10</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-3">
+            <div
+              id="progressBar"
+              class="bg-gradient-to-r from-green-500 to-teal-600 h-3 rounded-full transition-all duration-500"
+              style="width: 10%"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="quiz-card mb-6">
+          <h2 id="questionText" class="text-xl font-bold text-gray-800 mb-6">
+            Question will appear here
+          </h2>
+
+          <div id="optionsContainer" class="space-y-3"></div>
+
+          <button
+            onclick="nextQuestion()"
+            id="nextButton"
+            class="mt-6 bg-blue-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-600 transition-all hidden"
+          >
+            Next Question
+          </button>
+        </div>
+
+        <!-- Timer -->
+        <div class="text-center text-gray-600">
+          <i data-feather="clock" class="inline w-4 h-4 mr-2"></i>
+          Waktu: <span id="timer" class="font-semibold">00:00</span>
+        </div>
+      </div>
+
+      <!-- Result Screen -->
+      <div id="resultScreen" class="hidden">
+        <div class="bg-white rounded-2xl shadow-lg p-8 text-center">
+          <div
+            class="w-32 h-32 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6"
+          >
+            <i data-feather="award" class="text-white w-16 h-16"></i>
+          </div>
+
+          <h2 class="text-3xl font-bold mb-4">Quiz Selesai! 🎉</h2>
+
+          <div class="mb-6">
+            <p class="text-5xl font-bold text-green-600 mb-2">
+              <span id="finalScore">0</span>/100
+            </p>
+            <p class="text-lg text-gray-600" id="resultMessage">
+              Keep learning!
+            </p>
+          </div>
+
+          <div class="bg-gray-50 rounded-lg p-4 mb-6">
+            <p class="text-sm text-gray-600">
+              Nama: <strong id="resultName" class="text-gray-800"></strong
+              ><br />
+              Jawaban Benar:
+              <strong id="correctAnswers" class="text-green-600"></strong
+              >/10<br />
+              Waktu: <strong id="totalTime" class="text-blue-600"></strong>
+            </p>
+          </div>
+
+          <div class="flex gap-4 justify-center">
+            <button
+              onclick="location.reload()"
+              class="bg-gray-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-600 transition-all"
+            >
+              Coba Lagi
+            </button>
+            <button
+              onclick="location.href='leaderboard.html'"
+              class="bg-green-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-700 transition-all"
+            >
+              Lihat Papan Skor
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <custom-footer></custom-footer>
+
+    <script src="components/navbar.js"></script>
+    <script src="components/footer.js"></script>
+    <script src="script.js"></script>
+    <script>
+      let currentQuestion = 0;
+      let score = 0;
+      let questions = [];
+      let userAnswers = [];
+      let startTime;
+      let timerInterval;
+      let userName;
+
+      function startQuiz() {
+        userName = document.getElementById("userName").value.trim();
+
+        if (!userName) {
+          showNotification(
+            "Silakan masukkan nama kamu terlebih dahulu",
+            "error"
+          );
+          return;
+        }
+
+        document.getElementById("startScreen").classList.add("hidden");
+        document.getElementById("quizScreen").classList.remove("hidden");
+
+        questions = generateQuizQuestions();
+        currentQuestion = 0;
+        score = 0;
+        userAnswers = [];
+        startTime = Date.now();
+
+        startTimer();
+        showQuestion();
+      }
+
+      function startTimer() {
+        timerInterval = setInterval(() => {
+          const elapsed = Math.floor((Date.now() - startTime) / 1000);
+          const minutes = Math.floor(elapsed / 60);
+          const seconds = elapsed % 60;
+          document.getElementById("timer").textContent = `${minutes
+            .toString()
+            .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+        }, 1000);
+      }
+
+      function showQuestion() {
+        if (currentQuestion >= questions.length) {
+          showResults();
+          return;
+        }
+
+        const question = questions[currentQuestion];
+        document.getElementById("questionText").textContent = `${
+          currentQuestion + 1
+        }. ${question.question}`;
+        document.getElementById("questionCounter").textContent = `${
+          currentQuestion + 1
+        } dari ${questions.length}`;
+        document.getElementById("progressBar").style.width = `${
+          ((currentQuestion + 1) / questions.length) * 100
+        }%`;
+
+        const optionsContainer = document.getElementById("optionsContainer");
+        optionsContainer.innerHTML = "";
+
+        question.options.forEach((option, index) => {
+          const optionDiv = document.createElement("div");
+          optionDiv.className = "option-item";
+          optionDiv.innerHTML = `
+                    <label class="flex items-center p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-blue-50 transition-all">
+                        <input type="radio" name="answer" value="${index}" class="mr-3">
+                        <span class="text-lg">${option}</span>
+                    </label>
+                `;
+          optionsContainer.appendChild(optionDiv);
+        });
+
+        document.getElementById("nextButton").classList.add("hidden");
+
+        // Add click handlers to options
+        document.querySelectorAll('input[name="answer"]').forEach((input) => {
+          input.addEventListener("change", function () {
+            document.getElementById("nextButton").classList.remove("hidden");
+
+            // Disable other options
+            document.querySelectorAll('input[name="answer"]').forEach((opt) => {
+              opt.disabled = true;
+            });
+
+            // Highlight selected option
+            this.parentElement.classList.add("bg-blue-100", "border-blue-500");
+          });
+        });
+      }
+
+      function nextQuestion() {
+        const selectedAnswer = document.querySelector(
+          'input[name="answer"]:checked'
+        );
+
+        if (!selectedAnswer) return;
+
+        const answerIndex = parseInt(selectedAnswer.value);
+        userAnswers.push(answerIndex);
+
+        if (answerIndex === questions[currentQuestion].correct) {
+          score += 10;
+        }
+
+        currentQuestion++;
+
+        if (currentQuestion < questions.length) {
+          setTimeout(showQuestion, 300);
+        } else {
+          showResults();
+        }
+      }
+
+      function showResults() {
+        clearInterval(timerInterval);
+
+        const totalTime = Math.floor((Date.now() - startTime) / 1000);
+        const minutes = Math.floor(totalTime / 60);
+        const seconds = totalTime % 60;
+        const correctCount = score / 10;
+
+        document.getElementById("quizScreen").classList.add("hidden");
+        document.getElementById("resultScreen").classList.remove("hidden");
+
+        document.getElementById("finalScore").textContent = score;
+        document.getElementById("resultName").textContent = userName;
+        document.getElementById("correctAnswers").textContent = correctCount;
+        document.getElementById(
+          "totalTime"
+        ).textContent = `${minutes}m ${seconds}s`;
+
+        // Set motivational message
+        let message = "";
+        if (score >= 90) {
+          message = "🏆 Sempurna! Kamu master konfigurasi elektron!";
+        } else if (score >= 70) {
+          message = "🌟 Hebat! Kamu sudah menguasai materi ini!";
+        } else if (score >= 50) {
+          message = "💪 Bagus! Terus belajar untuk hasil lebih baik!";
+        } else {
+          message = "📚 Jangan menyerah! Coba lagi ya!";
+        }
+        document.getElementById("resultMessage").textContent = message;
+
+        // Save to database
+        saveScore(userName, score);
+        showNotification(`Skor tersimpan! Nilai: ${score}/100`, "success");
+      }
+
+      // Initialize
+      document.addEventListener("DOMContentLoaded", function () {
+        feather.replace();
+      });
+    </script>
+  </body>
+</html>

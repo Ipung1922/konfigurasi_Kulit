@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simulasi Pengisian Elektron</title>
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(to bottom, #e3f2fd, #bbdefb);
+        margin: 0;
+        padding: 0;
+      }
+
+      header {
+        text-align: center;
+        padding: 20px;
+        background-color: #1976d2;
+        color: white;
+        font-size: 1.5rem;
+        font-weight: bold;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 30px;
+      }
+
+      .input-box {
+        background: white;
+        border-radius: 12px;
+        padding: 20px 30px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+        text-align: center;
+      }
+
+      .input-box input {
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        width: 150px;
+        font-size: 16px;
+        text-align: center;
+        margin-right: 10px;
+      }
+
+      .input-box button {
+        background-color: #1976d2;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.3s;
+      }
+
+      .input-box button:hover {
+        background-color: #1565c0;
+      }
+
+      .output-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        flex-wrap: wrap;
+      }
+
+      .info-box {
+        background: #ffffff;
+        width: 150px;
+        height: 150px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-weight: bold;
+        color: #0d47a1;
+      }
+
+      .symbol {
+        font-size: 2.5rem;
+        color: #1565c0;
+      }
+
+      .atomic-number {
+        font-size: 1.2rem;
+        color: #1976d2;
+      }
+
+      canvas {
+        background: #fafafa;
+        border-radius: 50%;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+        display: block;
+      }
+
+      footer {
+        text-align: center;
+        padding: 20px;
+        font-size: 0.9rem;
+        color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <custom-navbar></custom-navbar>
+    <header>🔬 Simulasi Pengisian Elektron Berdasarkan Kulit</header>
+    <main>
+      <div class="input-box">
+        <label for="jumlahElektron">Jumlah Elektron:</label><br />
+        <input
+          type="number"
+          id="jumlahElektron"
+          placeholder="Masukkan jumlah elektron"
+          min="1"
+          max="118"
+        />
+        <button onclick="tampilkanKonfigurasi()">Tampilkan</button>
+      </div>
+
+      <div class="output-container">
+        <!-- Kotak lambang atom -->
+        <div id="lambangBox" class="info-box">
+          <div class="symbol" id="symbol">-</div>
+          <div class="atomic-number" id="atomicNumber">Z = -</div>
+        </div>
+
+        <!-- Kanvas orbit -->
+        <canvas id="ilustrasi" width="400" height="400"></canvas>
+
+        <!-- Kotak konfigurasi elektron -->
+        <div id="configBox" class="info-box">
+          <div id="configText">Konfigurasi</div>
+        </div>
+      </div>
+    </main>
+
+    <custom-footer></custom-footer>
+
+    <script src="components/navbar.js"></script>
+    <script src="components/footer.js"></script>
+
+    <script>
+      // Data contoh nama dan lambang atom
+      const atomData = {
+        1: { symbol: "H", name: "Hidrogen" },
+        2: { symbol: "He", name: "Helium" },
+        3: { symbol: "Li", name: "Litium" },
+        4: { symbol: "Be", name: "Berilium" },
+        5: { symbol: "B", name: "Boron" },
+        6: { symbol: "C", name: "Karbon" },
+        7: { symbol: "N", name: "Nitrogen" },
+        8: { symbol: "O", name: "Oksigen" },
+        9: { symbol: "F", name: "Fluorin" },
+        10: { symbol: "Ne", name: "Neon" },
+        11: { symbol: "Na", name: "Natrium" },
+        12: { symbol: "Mg", name: "Magnesium" },
+        17: { symbol: "Cl", name: "Klorin" },
+        20: { symbol: "Ca", name: "Kalsium" },
+        21: { symbol: "Sc", name: "Skandium" },
+        22: { symbol: "Ti", name: "Titanium" },
+      };
+
+      // Data manual konfigurasi (tanpa perhitungan otomatis)
+      const konfigurasiData = {
+        1: "K1",
+        2: "K2",
+        3: "K2 L1",
+        4: "K2 L2",
+        5: "K2 L3",
+        6: "K2 L4",
+        7: "K2 L5",
+        8: "K2 L6",
+        9: "K2 L7",
+        10: "K2 L8",
+        11: "K2 L8 M1",
+        12: "K2 L8 M2",
+        13: "K2 L8 M3",
+        14: "K2 L8 M4",
+        15: "K2 L8 M5",
+        16: "K2 L8 M6",
+        17: "K2 L8 M7",
+        18: "K2 L8 M8",
+        19: "K2 L8 M8 N1",
+        20: "K2 L8 M8 N2",
+        21: "K2 L8 M8 N3",
+        22: "K2 L8 M8 N4",
+        23: "K2 L8 M8 N5",
+        24: "K2 L8 M8 N6",
+        25: "K2 L8 M8 N7",
+        26: "K2 L8 M8 N8",
+        27: "K2 L8 M8 N8 O1",
+        29: "K2 L8 M18 N1",
+        30: "K2 L8 M18 N2",
+        31: "K2 L8 M18 N3",
+        32: "K2 L8 M18 N4",
+        33: "K2 L8 M18 N5",
+        34: "K2 L8 M18 N6",
+        35: "K2 L8 M18 N7",
+        36: "K2 L8 M18 N8",
+        37: "K2 L8 M18 N8 O1",
+        38: "K2 L8 M18 N8 O2",
+        39: "K2 L8 M18 N8 O3",
+        40: "K2 L8 M18 N8 O4",
+        41: "K2 L8 M18 N8 O5",
+        42: "K2 L8 M18 N8 O6",
+        43: "K2 L8 M18 N8 O7",
+        44: "K2 L8 M18 N8 O8",
+        45: "K2 L8 M18 N8 O8 P1",
+        46: "K2 L8 M18 N8 O8 P2",
+        47: "K2 L8 M18 N18 O1",
+        48: "K2 L8 M18 N18 O2",
+        49: "K2 L8 M18 N18 O3",
+        50: "K2 L8 M18 N18 O4",
+        51: "K2 L8 M18 N18 O5",
+        52: "K2 L8 M18 N18 O6",
+        53: "K2 L8 M18 N18 O7",
+        54: "K2 L8 M18 N18 O8",
+        55: "K2 L8 M18 N18 O8 P1",
+        56: "K2 L8 M18 N18 O8 P2",
+        57: "K2 L8 M18 N18 O8 P3",
+        58: "K2 L8 M18 N18 O8 P4",
+        59: "K2 L8 M18 N18 O8 P5",
+        60: "K2 L8 M18 N18 O8 P6",
+        61: "K2 L8 M18 N32 O1",
+        62: "K2 L8 M18 N32 O2",
+        63: "K2 L8 M18 N32 O3",
+        64: "K2 L8 M18 N32 O4",
+        65: "K2 L8 M18 N32 O5",
+        66: "K2 L8 M18 N32 O6",
+        67: "K2 L8 M18 N32 O7",
+        68: "K2 L8 M18 N32 O8",
+        69: "K2 L8 M18 N32 O8 P1",
+        70: "K2 L8 M18 N32 O8 P2",
+        71: "K2 L8 M18 N32 O8 P3",
+        72: "K2 L8 M18 N32 O8 P4",
+        73: "K2 L8 M18 N32 O8 P5",
+        74: "K2 L8 M18 N32 O8 P6",
+        75: "K2 L8 M18 N32 O8 P7",
+        76: "K2 L8 M18 N32 O8 P8",
+        77: "K2 L8 M18 N32 O8 P8 Q1",
+        78: "K2 L8 M18 N32 O8 P8 Q2",
+        79: "K2 L8 M18 N32 O8 P8 Q3",
+        80: "K2 L8 M18 N32 O18 P2",
+        81: "K2 L8 M18 N32 O18 P3",
+        82: "K2 L8 M18 N32 O18 P4",
+        83: "K2 L8 M18 N32 O18 P5",
+        84: "K2 L8 M18 N32 O18 P6",
+        85: "K2 L8 M18 N32 O18 P7",
+        86: "K2 L8 M18 N32 O18 P8",
+        87: "K2 L8 M18 N32 O18 P8 Q1",
+        88: "K2 L8 M18 N32 O18 P8 Q2",
+        89: "K2 L8 M18 N32 O18 P8 Q3",
+        90: "K2 L8 M18 N32 O18 P8 Q4",
+        91: "K2 L8 M18 N32 O18 P8 Q5",
+        92: "K2 L8 M18 N32 O18 P8 Q6",
+        93: "K2 L8 M18 N32 O32 P1",
+        94: "K2 L8 M18 N32 O32 P2",
+        95: "K2 L8 M18 N32 O32 P3",
+        96: "K2 L8 M18 N32 O32 P4",
+        97: "K2 L8 M18 N32 O32 P5",
+        98: "K2 L8 M18 N32 O32 P6",
+        99: "K2 L8 M18 N32 O32 P7",
+        100: "K2 L8 M18 N32 O32 P8",
+        101: "K2 L8 M18 N32 O32 P8 Q1",
+        102: "K2 L8 M18 N32 O32 P8 Q2",
+        103: "K2 L8 M18 N32 O32 P8 Q3",
+        104: "K2 L8 M18 N32 O32 P8 Q4",
+        105: "K2 L8 M18 N32 O32 P8 Q5",
+        106: "K2 L8 M18 N32 O32 P8 Q6",
+        107: "K2 L8 M18 N32 O32 P8 Q7",
+        108: "K2 L8 M18 N32 O32 P8 Q8",
+        109: "K2 L8 M18 N32 O32 P8 Q8 R1",
+        110: "K2 L8 M18 N32 O32 P8 Q8 R2",
+        111: "K2 L8 M18 N32 O32 P18 Q1",
+        112: "K2 L8 M18 N32 O32 P18 Q2",
+        113: "K2 L8 M18 N32 O32 P18 Q3",
+        114: "K2 L8 M18 N32 O32 P18 Q4",
+        115: "K2 L8 M18 N32 O32 P18 Q5",
+        116: "K2 L8 M18 N32 O32 P18 Q6",
+        117: "K2 L8 M18 N32 O32 P18 Q7",
+        118: "K2 L8 M18 N32 O32 P18 Q8",
+      };
+
+      function tampilkanKonfigurasi() {
+        const jumlah = parseInt(
+          document.getElementById("jumlahElektron").value
+        );
+        const data = atomData[jumlah];
+        const hasil = konfigurasiData[jumlah] || "Data belum tersedia";
+
+        // Update kotak lambang
+        document.getElementById("symbol").innerText = data ? data.symbol : "?";
+        document.getElementById("atomicNumber").innerText = data
+          ? `Z = ${jumlah}`
+          : "Z = ?";
+
+        // Update konfigurasi
+        document.getElementById("configText").innerText = hasil;
+
+        // Gambar orbit
+        gambarIlustrasi(hasil);
+      }
+
+      function gambarIlustrasi(konfigurasi) {
+        const canvas = document.getElementById("ilustrasi");
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (!konfigurasi || konfigurasi === "Data belum tersedia") return;
+
+        const regexKulit = /([KLMNOPQ])(\d+)/g;
+        const kulit = [];
+        let match;
+        while ((match = regexKulit.exec(konfigurasi)) !== null) {
+          kulit.push({ huruf: match[1], jumlah: parseInt(match[2]) });
+        }
+
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+
+        // Inti atom
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 20, 0, 2 * Math.PI);
+        ctx.fillStyle = "#1565c0";
+        ctx.fill();
+
+        // Jarak antar kulit
+        const canvasSize = Math.min(canvas.width, canvas.height);
+        const margin = 40;
+        const maxRadius = canvasSize / 2 - margin;
+        const step =
+          kulit.length > 1 ? (maxRadius - 40) / (kulit.length - 1) : 0;
+
+        kulit.forEach((item, i) => {
+          const radius = 40 + i * step;
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+          ctx.strokeStyle = "#64b5f6";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          for (let j = 0; j < item.jumlah; j++) {
+            const angle = (2 * Math.PI * j) / item.jumlah;
+            const x = centerX + radius * Math.cos(angle);
+            const y = centerY + radius * Math.sin(angle);
+            ctx.beginPath();
+            ctx.arc(x, y, 5, 0, 2 * Math.PI);
+            ctx.fillStyle = "#ff9800";
+            ctx.fill();
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

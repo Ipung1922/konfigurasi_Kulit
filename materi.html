@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Materi - Konfigurasi Elektron</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+  </head>
+
+  <body
+    class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50"
+  >
+    <custom-navbar></custom-navbar>
+
+    <main class="container mx-auto px-4 py-12 max-w-6xl">
+      <h1 class="text-4xl md:text-5xl font-bold text-center mb-8 text-blue-900">
+        📘 Materi Konfigurasi Elektron Berdasarkan Kulit
+      </h1>
+
+      <!-- Pengertian -->
+      <section class="mb-12 animate-fade-in">
+        <div class="bg-white rounded-2xl shadow-lg p-8">
+          <h2
+            class="text-2xl font-bold text-blue-800 mb-4 flex items-center gap-2"
+          >
+            <i data-feather="book" class="w-6 h-6"></i>
+            Pengertian Konfigurasi Elektron Berdasarkan Kulit Atom
+          </h2>
+          <p class="text-gray-700 leading-relaxed mb-4">
+            Konfigurasi elektron berdasarkan kulit adalah cara penyusunan
+            elektron dalam atom pada berbagai tingkat energi (kulit). Elektron
+            mengelilingi inti atom pada jalur tertentu yang disebut kulit atau
+            orbit. Setiap kulit memiliki kapasitas maksimum elektron yang dapat
+            ditampung sesuai rumus 2n², dimana n adalah nomor kulit.
+          </p>
+          <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+            <p class="text-blue-800">
+              <strong>💡 Catatan:</strong> Kulit elektron dilambangkan dengan
+              huruf K (n=1), L (n=2), M (n=3), N (n=4), dan seterusnya.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tabel Jumlah Maksimum Elektron -->
+      <section class="mb-12 animate-fade-in">
+        <div class="bg-white rounded-2xl shadow-lg p-8">
+          <h2
+            class="text-2xl font-bold text-blue-800 mb-6 flex items-center gap-2"
+          >
+            <i data-feather="grid" class="w-6 h-6"></i>
+            Tabel Jumlah Maksimum Elektron per Kulit
+          </h2>
+          <div class="overflow-x-auto">
+            <table class="w-full electron-table">
+              <thead>
+                <tr>
+                  <th class="text-left">Kulit (n)</th>
+                  <th class="text-left">Simbol</th>
+                  <th class="text-left">Rumus (2n²)</th>
+                  <th class="text-left">Maksimum Elektron</th>
+                  <th class="text-left">Warna</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="hover:bg-gray-50 transition-colors">
+                  <td class="font-semibold">1</td>
+                  <td>K</td>
+                  <td>2 × 1²</td>
+                  <td class="font-bold text-red-600">2</td>
+                  <td>
+                    <span
+                      class="inline-block w-6 h-6 bg-red-500 rounded"
+                    ></span>
+                  </td>
+                </tr>
+                <tr class="hover:bg-gray-50 transition-colors">
+                  <td class="font-semibold">2</td>
+                  <td>L</td>
+                  <td>2 × 2²</td>
+                  <td class="font-bold text-orange-600">8</td>
+                  <td>
+                    <span
+                      class="inline-block w-6 h-6 bg-orange-500 rounded"
+                    ></span>
+                  </td>
+                </tr>
+                <tr class="hover:bg-gray-50 transition-colors">
+                  <td class="font-semibold">3</td>
+                  <td>M</td>
+                  <td>2 × 3²</td>
+                  <td class="font-bold text-yellow-600">18</td>
+                  <td>
+                    <span
+                      class="inline-block w-6 h-6 bg-yellow-500 rounded"
+                    ></span>
+                  </td>
+                </tr>
+                <tr class="hover:bg-gray-50 transition-colors">
+                  <td class="font-semibold">4</td>
+                  <td>N</td>
+                  <td>2 × 4²</td>
+                  <td class="font-bold text-green-600">32</td>
+                  <td>
+                    <span
+                      class="inline-block w-6 h-6 bg-green-500 rounded"
+                    ></span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contoh Pengisian Elektron -->
+      <section class="mb-12 animate-fade-in">
+        <div class="bg-white rounded-2xl shadow-lg p-8">
+          <h2
+            class="text-2xl font-bold text-blue-800 mb-6 flex items-center gap-2"
+          >
+            <i data-feather="layers" class="w-6 h-6"></i>
+            Contoh Pengisian Elektron
+          </h2>
+
+          <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Natrium (Na) -->
+            <div
+              class="border rounded-lg p-4 hover:shadow-md transition-shadow"
+            >
+              <h3 class="font-bold text-lg mb-3 text-center">
+                Natrium (Na) - Nomor Atom 11
+              </h3>
+              <div class="flex justify-center mb-4">
+                <div class="text-center">
+                  <div class="text-9xl font-bold text-blue-700">Na</div>
+                </div>
+              </div>
+              <div class="text-center">
+                <p
+                  class="font-mono bg-blue-100 text-blue-800 px-3 py-1 rounded"
+                >
+                  2K 8L 1M
+                </p>
+                <p class="text-sm text-gray-600 mt-2">Elektron valensi: 1</p>
+              </div>
+            </div>
+
+            <!-- Klorin (Cl⁻) -->
+            <div
+              class="border rounded-lg p-4 hover:shadow-md transition-shadow"
+            >
+              <h3 class="font-bold text-lg mb-3 text-center">
+                Klorin (Cl) - Nomor Atom 17
+              </h3>
+              <div class="flex justify-center mb-4">
+                <div class="text-center">
+                  <div class="text-9xl font-bold text-green-700">Cl</div>
+                </div>
+              </div>
+              <div class="text-center">
+                <p
+                  class="font-mono bg-blue-100 text-blue-800 px-3 py-1 rounded"
+                >
+                  2K 8L 7M
+                </p>
+                <p class="text-sm text-gray-600 mt-2">Elektron valensi: 7</p>
+              </div>
+            </div>
+
+            <!-- Magnesium (Mg) -->
+            <div
+              class="border rounded-lg p-4 hover:shadow-md transition-shadow"
+            >
+              <h3 class="font-bold text-lg mb-3 text-center">
+                Magnesium (Mg) - Nomor Atom 12
+              </h3>
+              <div class="flex justify-center mb-4">
+                <div class="text-center">
+                  <div class="text-9xl font-bold text-purple-700">Mg</div>
+                </div>
+              </div>
+              <div class="text-center">
+                <p
+                  class="font-mono bg-blue-100 text-blue-800 px-3 py-1 rounded"
+                >
+                  2K 8L 2M
+                </p>
+                <p class="text-sm text-gray-600 mt-2">Elektron valensi: 2</p>
+              </div>
+            </div>
+            <!-- Neon (Ne) -->
+            <div
+              class="border rounded-lg p-4 hover:shadow-md transition-shadow"
+            >
+              <h3 class="font-bold text-lg mb-3 text-center">
+                Neon (Ne) - Nomor Atom 10
+              </h3>
+              <div class="flex justify-center mb-4">
+                <div class="text-center">
+                  <div class="text-9xl font-bold text-pink-700">Ne</div>
+                </div>
+              </div>
+              <div class="text-center">
+                <p
+                  class="font-mono bg-blue-100 text-blue-800 px-3 py-1 rounded"
+                >
+                  2K 8L
+                </p>
+                <p class="text-sm text-gray-600 mt-2">
+                  Elektron valensi: 8 (stabil)
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Cara Menentukan Golongan dan Periode -->
+      <section class="mb-12 animate-fade-in">
+        <div class="bg-white rounded-2xl shadow-lg p-8">
+          <h2
+            class="text-2xl font-bold text-blue-800 mb-6 flex items-center gap-2"
+          >
+            <i data-feather="compass" class="w-6 h-6"></i>
+            Cara Menentukan Golongan dan Periode
+          </h2>
+
+          <div class="grid md:grid-cols-2 gap-8">
+            <div
+              class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6"
+            >
+              <h3 class="font-bold text-lg mb-3 text-blue-900">📐 Periode</h3>
+              <p class="text-gray-700 mb-3">
+                Ditentukan oleh jumlah kulit elektron yang ada.
+              </p>
+              <div class="bg-white rounded p-3">
+                <p class="font-semibold">Contoh: Mg (12)</p>
+                <p class="text-sm">Konfigurasi: 2K 8L 2M</p>
+                <p class="text-sm text-green-600 font-bold">
+                  → Periode 3 (ada 3 kulit)
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-6"
+            >
+              <h3 class="font-bold text-lg mb-3 text-purple-900">
+                👥 Golongan
+              </h3>
+              <p class="text-gray-700 mb-3">
+                Ditentukan oleh jumlah elektron pada kulit terluar (elektron
+                valensi).
+              </p>
+              <div class="bg-white rounded p-3">
+                <p class="font-semibold">Contoh: Mg (12)</p>
+                <p class="text-sm">Konfigurasi: 2K 8L 2M</p>
+                <p class="text-sm text-purple-600 font-bold">
+                  → Golongan IIA (2 elektron valensi)
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 📊 Tabel Periodik Unsur -->
+      <section class="mb-12 animate-fade-in">
+        <div class="bg-white rounded-2xl shadow-lg p-8 text-center">
+          <h2
+            class="text-2xl font-bold text-blue-800 mb-4 flex items-center justify-center gap-2"
+          >
+            <i data-feather="layout" class="w-6 h-6"></i>
+            Tabel Periodik Unsur
+          </h2>
+          <p class="text-gray-700 mb-6">
+            Berikut adalah tampilan tabel periodik unsur sebagai acuan dalam
+            menentukan letak golongan dan periode suatu unsur berdasarkan
+            konfigurasi elektronnya.
+          </p>
+
+          <!-- 🧩 Tempat untuk upload / tampilkan gambar tabel periodik -->
+          <div
+            class="border-2 border-dashed border-blue-300 rounded-xl p-6 bg-blue-50 hover:bg-blue-100 transition"
+          >
+            <p class="text-gray-600 mb-3">
+              Gambar Tabel Periodik Unsur:
+            </p>
+            <img
+              src="periodic.png"
+              alt="Tabel Periodik Unsur"
+              class="mx-auto max-w-full rounded-lg shadow-md"
+              id="tabel-periodik"
+            />
+            <!-- Jika ingin upload manual, nanti tinggal ganti src-nya -->
+          </div>
+        </div>
+      </section>
+
+      <div
+        class="mt-6 p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-500"
+      >
+        <p class="text-yellow-900">
+          <strong>Perhatian:</strong> Unsur yang bisa ditentukan golongan dan
+          periode-nya dengan konfigurasi  elektron berdasarkan kulit mudah adalah unsur golongan utama atau golongan A saja.
+        </p>
+      </div>
+    </main>
+
+    <custom-footer></custom-footer>
+
+    <script src="components/navbar.js"></script>
+    <script src="components/footer.js"></script>
+    <script src="script.js"></script>
+    <script>
+      feather.replace();
+    </script>
+  </body>
+</html>

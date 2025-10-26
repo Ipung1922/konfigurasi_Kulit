@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Tabel Periodik Interaktif – Flashcard Unsur</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --gap: 8px;
+        --card-w: min(
+          max(calc((100vw - 48px - (17 * var(--gap))) / 14), 80px),
+          140px
+        );
+        --card-h: calc(var(--card-w) * 1.3);
+        --navy: #0e2546;
+        --primary: #1e3a8a;
+        --accent: #2563eb;
+        --light: #f8fafc;
+
+        /* 🎨 warna kuat dan mencolok per golongan */
+        --alkali: #ffb347;
+        --alkaline: #ff8fa3;
+        --transition: #66b3ff;
+        --posttransition: #c084fc;
+        --metalloid: #7fe57f;
+        --nonmetal: #ffd966;
+        --halogen: #4ed99c;
+        --noble: #7fdbff;
+        --other: #e5e5e5;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        margin: 0;
+        background: linear-gradient(180deg, #f3f6ff, #ffffff);
+        color: var(--navy);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0;
+      }
+
+      main {
+        width: 100%;
+        max-width: 1280px;
+        margin-top: 90px; /* beri jarak dari navbar */
+        margin-bottom: 80px; /* beri jarak untuk footer */
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 26px;
+        font-weight: 700;
+        text-align: center;
+        color: var(--primary);
+      }
+
+      .subtitle {
+        color: var(--accent);
+        margin: 8px 0 16px;
+        font-size: 15px;
+        text-align: center;
+        max-width: 700px;
+      }
+
+      .game-instruction {
+        position: relative;
+        max-width: 600px;
+        margin: 0 auto 10px auto;
+        text-align: center;
+        font-size: 14px;
+        color: #334;
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 10px;
+        padding: 10px 14px;
+        line-height: 1.5;
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+      }
+
+      .table-wrap {
+        width: 100%;
+        overflow-x: auto;
+        padding: 10px;
+      }
+
+      .ptable {
+        display: grid;
+        grid-template-columns: repeat(18, 1fr);
+        gap: var(--gap);
+        justify-items: center;
+        align-items: start;
+      }
+
+      .element {
+        width: 100%;
+        max-width: var(--card-w);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .inner {
+        width: 100%;
+        height: var(--card-h);
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      .element.flipped .inner {
+        transform: rotateY(180deg);
+      }
+
+      .face {
+        position: absolute;
+        inset: 0;
+        border-radius: 8px;
+        backface-visibility: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      }
+
+      .front {
+        background: #fff;
+        color: var(--navy);
+        border: 1.6px solid #bbb;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 4px;
+      }
+
+      .atomic-number {
+        font-size: calc(var(--card-h) * 0.18);
+        font-weight: 600;
+        text-align: left;
+      }
+
+      .symbol {
+        font-size: calc(var(--card-h) * 0.4);
+        font-weight: 700;
+        line-height: 1;
+      }
+
+      .mass {
+        font-size: calc(var(--card-h) * 0.15);
+        font-weight: 500;
+        color: #333;
+      }
+
+      .back {
+        color: #fff;
+        font-weight: 700;
+        font-size: calc(var(--card-h) * 0.12);
+        transform: rotateY(180deg);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 4px;
+        text-align: center;
+      }
+
+      .input-wrap {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        gap: 4px;
+      }
+
+      input {
+        width: 75%;
+        padding: 5px;
+        font-size: 12px;
+        border: 1.3px solid #ccc;
+        border-radius: 4px;
+      }
+
+      .submitBtn {
+        background: var(--accent);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        padding: 4px 8px;
+        font-size: 12px;
+        transition: background 0.2s;
+      }
+
+      .submitBtn:hover {
+        background: #1e40af;
+      }
+
+      #toggleSound {
+        margin: 10px;
+        padding: 6px 12px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      #toggleSound:hover {
+        background: var(--accent);
+      }
+
+      @media (max-width: 768px) {
+        main {
+          margin-top: 80px;
+        }
+        h1 {
+          font-size: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <custom-navbar></custom-navbar>
+    <audio id="clickSound" src="sound.mp3"></audio>
+    <h1>Tabel Periodik Interaktif – Flashcard Unsur</h1>
+    <p class="subtitle">
+      Silahkan bersenang senang sambil belajar konfigurasi elektron tiap unsur!
+    </p>
+    <div
+      class="game-instruction"
+      style="
+        position: relative;
+        max-width: 600px;
+        margin: 0 auto 10px auto;
+        text-align: center;
+        font-size: 14px;
+        color: #334;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 8px;
+        padding: 6px 10px;
+        line-height: 1.4;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+      "
+    >
+      📘 <b>Cara bermain:</b>
+      Masukkan konfigurasi elektron suatu unsur (misal: K2 L8 M1) pada kotak
+      dibawah kotak unsur.
+    </div>
+
+    <div class="table-wrap">
+      <div id="ptable" class="ptable"></div>
+    </div>
+    <custom-footer></custom-footer>
+    <script src="components/navbar2.js"></script>
+    <script src="components/footer.js"></script>
+    <script>
+      const elements = [
+        { z: 1, s: "H", mass: "1.008", r: 1, c: 1, bohr: "K1" },
+        { z: 2, s: "He", mass: "4.0026", r: 1, c: 18, bohr: "K2" },
+        { z: 3, s: "Li", mass: "6.94", r: 2, c: 1, bohr: "K2 L1" },
+        { z: 4, s: "Be", mass: "9.0122", r: 2, c: 2, bohr: "K2 L2" },
+        { z: 5, s: "B", mass: "10.81", r: 2, c: 13, bohr: "K2 L3" },
+        { z: 6, s: "C", mass: "12.011", r: 2, c: 14, bohr: "K2 L4" },
+        { z: 7, s: "N", mass: "14.007", r: 2, c: 15, bohr: "K2 L5" },
+        { z: 8, s: "O", mass: "15.999", r: 2, c: 16, bohr: "K2 L6" },
+        { z: 9, s: "F", mass: "18.998", r: 2, c: 17, bohr: "K2 L7" },
+        { z: 10, s: "Ne", mass: "20.180", r: 2, c: 18, bohr: "K2 L8" },
+        { z: 11, s: "Na", mass: "22.990", r: 3, c: 1, bohr: "K2 L8 M1" },
+        { z: 12, s: "Mg", mass: "24.305", r: 3, c: 2, bohr: "K2 L8 M2" },
+        { z: 13, s: "Al", mass: "26.982", r: 3, c: 13, bohr: "K2 L8 M3" },
+        { z: 14, s: "Si", mass: "28.085", r: 3, c: 14, bohr: "K2 L8 M4" },
+        { z: 15, s: "P", mass: "30.974", r: 3, c: 15, bohr: "K2 L8 M5" },
+        { z: 16, s: "S", mass: "32.06", r: 3, c: 16, bohr: "K2 L8 M6" },
+        { z: 17, s: "Cl", mass: "35.45", r: 3, c: 17, bohr: "K2 L8 M7" },
+        { z: 18, s: "Ar", mass: "39.948", r: 3, c: 18, bohr: "K2 L8 M8" },
+        { z: 19, s: "K", mass: "39.098", r: 4, c: 1, bohr: "K2 L8 M8 N1" },
+        { z: 20, s: "Ca", mass: "40.078", r: 4, c: 2, bohr: "K2 L8 M8 N2" },
+        { z: 21, s: "Sc", mass: "44.956", r: 4, c: 3, bohr: "K2 L8 M8 N3" },
+        { z: 22, s: "Ti", mass: "47.867", r: 4, c: 4, bohr: "K2 L8 M8 N4" },
+        { z: 23, s: "V", mass: "50.942", r: 4, c: 5, bohr: "K2 L8 M8 N5" },
+        { z: 24, s: "Cr", mass: "51.996", r: 4, c: 6, bohr: "K2 L8 M8 N6" },
+        { z: 25, s: "Mn", mass: "54.938", r: 4, c: 7, bohr: "K2 L8 M8 N7" },
+        { z: 26, s: "Fe", mass: "55.845", r: 4, c: 8, bohr: "K2 L8 M8 N8" },
+        { z: 27, s: "Co", mass: "58.933", r: 4, c: 9, bohr: "K2 L8 M8 N8 O1" },
+        { z: 28, s: "Ni", mass: "58.693", r: 4, c: 10, bohr: "K2 L8 M8 N8 O2" },
+        { z: 29, s: "Cu", mass: "63.546", r: 4, c: 11, bohr: "K2 L8 M18 N1 " },
+        { z: 30, s: "Zn", mass: "65.38", r: 4, c: 12, bohr: "K2 L8 M18 N2 " },
+        { z: 31, s: "Ga", mass: "69.723", r: 4, c: 13, bohr: "K2 L8 M18 N3" },
+        { z: 32, s: "Ge", mass: "72.63", r: 4, c: 14, bohr: "K2 L8 M18 N4 " },
+        { z: 33, s: "As", mass: "74.922", r: 4, c: 15, bohr: "K2 L8 M18 N5" },
+        { z: 34, s: "Se", mass: "78.971", r: 4, c: 16, bohr: "K2 L8 M18 N6" },
+        { z: 35, s: "Br", mass: "79.904", r: 4, c: 17, bohr: "K2 L8 M18 N7" },
+        { z: 36, s: "Kr", mass: "83.798", r: 4, c: 18, bohr: "K2 L8 M18 N8" },
+        { z: 37, s: "Rb", mass: "85.468", r: 5, c: 1, bohr: "K2 L8 M18 N8 O1" },
+        { z: 38, s: "Sr", mass: "87.62", r: 5, c: 2, bohr: "K2 L8 M18 N8 O2" },
+        { z: 39, s: "Y", mass: "88.906", r: 5, c: 3, bohr: "K2 L8 M18 N8 O3" },
+        { z: 40, s: "Zr", mass: "91.224", r: 5, c: 4, bohr: "K2 L8 M18 N8 O4" },
+        { z: 41, s: "Nb", mass: "92.906", r: 5, c: 5, bohr: "K2 L8 M18 N8 O5" },
+        { z: 42, s: "Mo", mass: "95.95", r: 5, c: 6, bohr: "K2 L8 M18 N8 O6" },
+        { z: 43, s: "Tc", mass: "98", r: 5, c: 7, bohr: "K2 L8 M18 N8 O7" },
+        { z: 44, s: "Ru", mass: "101.07", r: 5, c: 8, bohr: "K2 L8 M18 N8 O8" },
+        {
+          z: 45,
+          s: "Rh",
+          mass: "102.91",
+          r: 5,
+          c: 9,
+          bohr: "K2 L8 M18 N8 O8 P1",
+        },
+        {
+          z: 46,
+          s: "Pd",
+          mass: "106.42",
+          r: 5,
+          c: 10,
+          bohr: "K2 L8 M18 N8 O8 P2",
+        },
+        {
+          z: 47,
+          s: "Ag",
+          mass: "107.87",
+          r: 5,
+          c: 11,
+          bohr: "K2 L8 M18 N18 O1",
+        },
+        {
+          z: 48,
+          s: "Cd",
+          mass: "112.41",
+          r: 5,
+          c: 12,
+          bohr: "K2 L8 M18 N18 O2",
+        },
+        {
+          z: 49,
+          s: "In",
+          mass: "114.82",
+          r: 5,
+          c: 13,
+          bohr: "K2 L8 M18 N18 O3",
+        },
+        {
+          z: 50,
+          s: "Sn",
+          mass: "118.71",
+          r: 5,
+          c: 14,
+          bohr: "K2 L8 M18 N18 O4",
+        },
+        {
+          z: 51,
+          s: "Sb",
+          mass: "121.76",
+          r: 5,
+          c: 15,
+          bohr: "K2 L8 M18 N18 O5",
+        },
+        {
+          z: 52,
+          s: "Te",
+          mass: "127.60",
+          r: 5,
+          c: 16,
+          bohr: "K2 L8 M18 N18 O6",
+        },
+        {
+          z: 53,
+          s: "I",
+          mass: "126.90",
+          r: 5,
+          c: 17,
+          bohr: "K2 L8 M18 N18 O7",
+        },
+        {
+          z: 54,
+          s: "Xe",
+          mass: "131.29",
+          r: 5,
+          c: 18,
+          bohr: "K2 L8 M18 N18 O8",
+        },
+        {
+          z: 55,
+          s: "Cs",
+          mass: "132.91",
+          r: 6,
+          c: 1,
+          bohr: "K2 L8 M18 N18 O8 P1",
+        },
+        {
+          z: 56,
+          s: "Ba",
+          mass: "137.33",
+          r: 6,
+          c: 2,
+          bohr: "K2 L8 M18 N18 O8 P2",
+        },
+        {
+          z: 57,
+          s: "La",
+          mass: "138.91",
+          r: 6,
+          c: 3,
+          bohr: "K2 L8 M18 N18 O8 P3",
+        },
+        {
+          z: 72,
+          s: "Hf",
+          mass: "178.49",
+          r: 6,
+          c: 4,
+          bohr: "K2 L8 M18 N32 O8 P4",
+        },
+        {
+          z: 73,
+          s: "Ta",
+          mass: "180.95",
+          r: 6,
+          c: 5,
+          bohr: "K2 L8 M18 N32 O8 P5",
+        },
+        {
+          z: 74,
+          s: "W",
+          mass: "183.84",
+          r: 6,
+          c: 6,
+          bohr: "K2 L8 M18 N32 O8 P6",
+        },
+        {
+          z: 75,
+          s: "Re",
+          mass: "186.21",
+          r: 6,
+          c: 7,
+          bohr: "K2 L8 M18 N32 O8 P7",
+        },
+        {
+          z: 76,
+          s: "Os",
+          mass: "190.23",
+          r: 6,
+          c: 8,
+          bohr: "K2 L8 M18 N32 O8 P8 ",
+        },
+        {
+          z: 77,
+          s: "Ir",
+          mass: "192.22",
+          r: 6,
+          c: 9,
+          bohr: "K2 L8 M18 N32 O8 P8 Q1",
+        },
+        {
+          z: 78,
+          s: "Pt",
+          mass: "195.08",
+          r: 6,
+          c: 10,
+          bohr: "K2 L8 M18 N32 O8 P8 Q2",
+        },
+        {
+          z: 79,
+          s: "Au",
+          mass: "196.97",
+          r: 6,
+          c: 11,
+          bohr: "K2 L8 M18 N32 O8 P8 Q3",
+        },
+        {
+          z: 80,
+          s: "Hg",
+          mass: "200.59",
+          r: 6,
+          c: 12,
+          bohr: "K2 L8 M18 N32 O18 P2",
+        },
+        {
+          z: 81,
+          s: "Tl",
+          mass: "204.38",
+          r: 6,
+          c: 13,
+          bohr: "K2 L8 M18 N32 O18 P3",
+        },
+        {
+          z: 82,
+          s: "Pb",
+          mass: "207.2",
+          r: 6,
+          c: 14,
+          bohr: "K2 L8 M18 N32 O18 P4",
+        },
+        {
+          z: 83,
+          s: "Bi",
+          mass: "208.98",
+          r: 6,
+          c: 15,
+          bohr: "K2 L8 M18 N32 O18 P5",
+        },
+        {
+          z: 84,
+          s: "Po",
+          mass: "209",
+          r: 6,
+          c: 16,
+          bohr: "K2 L8 M18 N32 O18 P6",
+        },
+        {
+          z: 85,
+          s: "At",
+          mass: "210",
+          r: 6,
+          c: 17,
+          bohr: "K2 L8 M18 N32 O18 P7",
+        },
+        {
+          z: 86,
+          s: "Rn",
+          mass: "222",
+          r: 6,
+          c: 18,
+          bohr: "K2 L8 M18 N32 O18 P8",
+        },
+        {
+          z: 87,
+          s: "Fr",
+          mass: "223",
+          r: 7,
+          c: 1,
+          bohr: "K2 L8 M18 N32 O18 P8 Q1",
+        },
+        {
+          z: 88,
+          s: "Ra",
+          mass: "226",
+          r: 7,
+          c: 2,
+          bohr: "K2 L8 M18 N32 O18 P8 Q2",
+        },
+        {
+          z: 89,
+          s: "Ac",
+          mass: "227",
+          r: 7,
+          c: 3,
+          bohr: "K2 L8 M18 N32 O18 P8 Q3",
+        },
+        {
+          z: 104,
+          s: "Rf",
+          mass: "267",
+          r: 7,
+          c: 4,
+          bohr: "K2 L8 M18 N32 O32 P8 Q4",
+        },
+        {
+          z: 105,
+          s: "Db",
+          mass: "270",
+          r: 7,
+          c: 5,
+          bohr: "K2 L8 M18 N32 O32 P8 Q5 ",
+        },
+        {
+          z: 106,
+          s: "Sg",
+          mass: "271",
+          r: 7,
+          c: 6,
+          bohr: "K2 L8 M18 N32 O32 P8 Q6",
+        },
+        {
+          z: 107,
+          s: "Bh",
+          mass: "270",
+          r: 7,
+          c: 7,
+          bohr: "K2 L8 M18 N32 O32 P8 Q7",
+        },
+        {
+          z: 108,
+          s: "Hs",
+          mass: "277",
+          r: 7,
+          c: 8,
+          bohr: "K2 L8 M18 N32 O32 P8 Q8",
+        },
+        {
+          z: 109,
+          s: "Mt",
+          mass: "278",
+          r: 7,
+          c: 9,
+          bohr: "K2 L8 M18 N32 O32 P8 Q8 R1",
+        },
+        {
+          z: 110,
+          s: "Ds",
+          mass: "281",
+          r: 7,
+          c: 10,
+          bohr: "K2 L8 M18 N32 O32 P8 Q8 R2",
+        },
+        {
+          z: 111,
+          s: "Rg",
+          mass: "282",
+          r: 7,
+          c: 11,
+          bohr: "K2 L8 M18 N32 O32 P18 Q1",
+        },
+        {
+          z: 112,
+          s: "Cn",
+          mass: "285",
+          r: 7,
+          c: 12,
+          bohr: "K2 L8 M18 N32 O32 P18 Q2",
+        },
+        {
+          z: 113,
+          s: "Nh",
+          mass: "286",
+          r: 7,
+          c: 13,
+          bohr: "K2 L8 M18 N32 O32 P18 Q3",
+        },
+        {
+          z: 114,
+          s: "Fl",
+          mass: "289",
+          r: 7,
+          c: 14,
+          bohr: "K2 L8 M18 N32 O32 P18 Q4",
+        },
+        {
+          z: 115,
+          s: "Mc",
+          mass: "290",
+          r: 7,
+          c: 15,
+          bohr: "K2 L8 M18 N32 O32 P18 Q5",
+        },
+        {
+          z: 116,
+          s: "Lv",
+          mass: "293",
+          r: 7,
+          c: 16,
+          bohr: "K2 L8 M18 N32 O32 P18 Q6",
+        },
+        {
+          z: 117,
+          s: "Ts",
+          mass: "294",
+          r: 7,
+          c: 17,
+          bohr: "K2 L8 M18 N32 O32 P18 Q7",
+        },
+        {
+          z: 118,
+          s: "Og",
+          mass: "294",
+          r: 7,
+          c: 18,
+          bohr: "K2 L8 M18 N32 O32 P18 Q8",
+        },
+      ];
+
+      function getColor(z) {
+        if ([3, 11, 19, 37, 55, 87].includes(z)) return "var(--alkali)";
+        if ([4, 12, 20, 38, 56, 88].includes(z)) return "var(--alkaline)";
+        if ([9, 17, 35, 53, 85, 117].includes(z)) return "var(--halogen)";
+        if ([2, 10, 18, 36, 54, 86, 118].includes(z)) return "var(--noble)";
+        if ([5, 14, 32, 33, 51, 52, 84].includes(z)) return "var(--metalloid)";
+        if ([1, 6, 7, 8, 15, 16, 34].includes(z)) return "var(--nonmetal)";
+        if (z >= 21 && z <= 30) return "var(--transition)";
+        if (z >= 39 && z <= 48) return "var(--transition)";
+        if ((z >= 57 && z <= 71) || (z >= 89 && z <= 103))
+          return "var(--transition)";
+        if (z >= 72 && z <= 80) return "var(--transition)";
+        if (z >= 104 && z <= 112) return "var(--transition)";
+        if ([13, 31, 49, 50, 81, 82, 83, 113, 114, 115, 116].includes(z))
+          return "var(--posttransition)";
+        return "var(--other)";
+      }
+
+      // Bangun tabel
+      const grid = document.getElementById("ptable");
+      const clickSound = document.getElementById("clickSound");
+      let soundEnabled = true; // default suara aktif
+      const toggleBtn = document.createElement("button");
+      toggleBtn.id = "toggleSound";
+      toggleBtn.style = "margin:10px;padding:6px 12px;";
+      toggleBtn.textContent = "🔊 Matikan Sound";
+      document.body.insertBefore(
+        toggleBtn,
+        document.querySelector(".table-wrap")
+      );
+
+      toggleBtn.onclick = () => {
+        soundEnabled = !soundEnabled;
+
+        if (!soundEnabled) {
+          // Jika dimatikan, hentikan musik segera
+          clickSound.pause();
+          clickSound.currentTime = 0;
+          toggleBtn.textContent = "🔇 Nyalakan Sound";
+        } else {
+          toggleBtn.textContent = "🔊 Matikan Sound";
+        }
+      };
+
+      elements.forEach((el) => {
+        const color = getColor(el.z);
+        const card = document.createElement("div");
+        card.className = "element";
+        card.style.gridRow = el.r;
+        card.style.gridColumn = el.c;
+        card.innerHTML = `
+    <div class="inner">
+      <div class="face front">
+        <div class="atomic-number">${el.z}</div>
+        <div class="symbol">${el.s}</div>
+        <div class="mass">${el.mass}</div>
+      </div>
+      <div class="face back" style="background:${color}">
+        <div style="font-size:calc(var(--card-h)*0.12); line-height:1.4; word-spacing:0.1em;">
+          ${el.bohr}
+        </div>
+      </div>
+    </div>
+    <div class="input-wrap">
+  <input type="text" placeholder="Tulis konfigurasi elektron" />
+  <button class="submitBtn">✔</button>
+</div>
+  `;
+
+        const input = card.querySelector("input");
+        const submitBtn = card.querySelector(".submitBtn");
+
+        function checkAnswer() {
+          const answer = input.value.trim().toUpperCase();
+          if (answer === el.bohr.toUpperCase()) {
+            card.classList.add("flipped");
+            if (soundEnabled) {
+              clickSound.currentTime = 0;
+              clickSound.play();
+            }
+            input.disabled = true;
+            submitBtn.disabled = true;
+          } else {
+            input.style.borderColor = "red";
+          }
+        }
+
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            checkAnswer();
+          }
+        });
+
+        submitBtn.addEventListener("click", checkAnswer);
+
+        const inner = card.querySelector(".inner");
+
+        input.addEventListener("keyup", (e) => {
+          if (e.key === "Enter") {
+            const answer = input.value.trim().toUpperCase();
+            if (answer === el.bohr.toUpperCase()) {
+              card.classList.add("flipped");
+              if (soundEnabled) {
+                clickSound.currentTime = 0;
+                clickSound.play();
+              }
+              input.disabled = true; // kunci input setelah benar
+            } else {
+              input.style.borderColor = "red"; // feedback salah
+            }
+          }
+        });
+
+        // Tambahkan klik pada inner untuk reset
+        inner.addEventListener("click", () => {
+          if (card.classList.contains("flipped")) {
+            // Jika sudah terbalik, balikkan lagi
+            card.classList.remove("flipped");
+            input.value = ""; // hapus jawaban
+            input.disabled = false; // aktifkan input kembali
+            input.style.borderColor = ""; // reset border
+          }
+        });
+
+        grid.appendChild(card);
+      });
+    </script>
+  </body>
+</html>
